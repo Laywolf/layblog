@@ -28,6 +28,7 @@ jobs:
         run: yarn test
 
       - name: Report tests
+        uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
           name: test-results
