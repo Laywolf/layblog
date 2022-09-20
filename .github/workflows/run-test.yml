@@ -11,35 +11,35 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: [SETUP] Checkout
+      - name: Checkout
         uses: actions/checkout@v3
       
-      - name: [SETUP] Install Node.js 16
+      - name: Install Node.js 16
         uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'yarn'
       
-      - name: [SETUP] Install dependencies
+      - name: Install dependencies
         run: yarn install
 
-      - name: [TEST] Run tests
+      - name: Run tests
         run: yarn test
 
-      - name: [TEST] Report tests
+      - name: Report tests
+        uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
           name: test-results
           path: junit.xml
           fail-on-error: 'false'
           reporter: jest-junit
-          token: ${{ secret.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: [TEST] Discord notification
+      - name: Discord notification
         env:
-          DISCORD_WEBHOOK: ${{ secret.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@0.3.2
         with:
-          args: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} ${{ job.status }} in ${process.env.AS_TOOK}`
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
