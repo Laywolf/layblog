@@ -12,22 +12,22 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: [SETUP] Checkout
+      - name: Checkout
         uses: actions/checkout@v3
       
-      - name: [SETUP] Install Node.js 16
+      - name: Install Node.js 16
         uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'yarn'
       
-      - name: [SETUP] Install dependencies
+      - name: Install dependencies
         run: yarn install
 
-      - name: [TEST] Run tests
+      - name: Run tests
         run: yarn test
 
-      - name: [TEST] Report tests
+      - name: Report tests
         if: success() || failure()
         with:
           name: test-results
@@ -36,7 +36,7 @@ jobs:
           reporter: jest-junit
           token: ${{ secret.GITHUB_TOKEN }}
       
-      - name: [TEST] Discord notification
+      - name: Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secret.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@0.3.2
