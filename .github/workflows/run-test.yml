@@ -34,11 +34,11 @@ jobs:
           path: junit.xml
           fail-on-error: 'false'
           reporter: jest-junit
-          token: ${{ secret.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Discord notification
         env:
-          DISCORD_WEBHOOK: ${{ secret.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@0.3.2
         with:
-          args: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} ${{ job.status }} in ${process.env.AS_TOOK}`
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
