@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:report": "jest --ci --reporters=default --reporters=jest-junit"
   },
   "dependencies": {
     "next": "12.3.0",
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@testing-library/react": "^13.4.0",
     "eslint": "8.23.1",
-    "eslint-config-next": "12.3.0"
+    "eslint-config-next": "12.3.0",
+    "jest-junit": "^14.0.1"
   }
 }
