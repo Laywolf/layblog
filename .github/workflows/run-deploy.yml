@@ -34,13 +34,6 @@ jobs:
           reporter: jest-junit
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Discord notification
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        uses: Ilshidur/action-discord@0.3.2
-        with:
-          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
-
   deploy:
     needs: test
     runs-on: ubuntu-latest
@@ -72,6 +65,14 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-phase
+          BRANCH: gh-pages
           FOLDER: out
           CLEAN: true
+
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_EMBEDS: '[{"title": "Deploy success", "description": "[hyperlink](https://laywolf.github.io/layblog/) `see result`"}]'
+        uses: Ilshidur/action-discord@0.3.2
+        with:
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
