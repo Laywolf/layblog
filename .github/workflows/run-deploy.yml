@@ -72,7 +72,7 @@ jobs:
       - name: Discord notification
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_EMBEDS: '[{"title": "Deploy success", "description": "[hyperlink](https://laywolf.github.io/layblog/) `see result`"}]'
+          DISCORD_EMBEDS: '[{"title": "Deploy success", "description": "[see result](https://laywolf.github.io/layblog/)"}]'
         uses: Ilshidur/action-discord@0.3.2
         with:
           args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
