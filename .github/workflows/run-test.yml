@@ -1,4 +1,4 @@
-name: Run Test and Deploy
+name: Run Test
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ jobs:
         run: yarn install
 
       - name: Run tests
-        run: yarn test
+        run: yarn test:report
 
       - name: Report tests
         uses: dorny/test-reporter@v1
