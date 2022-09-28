@@ -7,7 +7,7 @@ const path = [
   { uid: 3, name: 'Photo Card', id: 3, path: 'photocard' },
   { uid: 4, name: 'About', id: 4, path: 'about' },
 ]
-export default function Header() {
+const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <nav>
@@ -26,3 +26,5 @@ export default function Header() {
     </header>
   )
 }
+
+export default Header

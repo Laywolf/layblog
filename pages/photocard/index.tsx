@@ -1,6 +1,7 @@
+import { NextPage } from 'next'
 import Link from 'next/link'
 
-export default function Photoboard() {
+const Photoboard: NextPage = () => {
   return (
     <div>
       <Link href="/">
@@ -9,3 +10,5 @@ export default function Photoboard() {
     </div>
   )
 }
+
+export default Photoboard

@@ -8,7 +8,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   // no prefix for vercel deploy
-  // assetPrefix: !debug ? `/${repository}/` : undefined,
+  assetPrefix: /*! debug ? `/${repository}/` : */ undefined,
   trailingSlash: true,
   images: {
     domains: ['github.com'],

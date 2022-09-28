@@ -1,6 +1,6 @@
 import styles from 'styles/components/Sidebar.module.css'
 
-export default function Sidebar() {
+const Sidebar: React.FC = () => {
   return (
     <aside className={styles.SidebarCard}>
       <h2> Avatars</h2>
@@ -12,3 +12,5 @@ export default function Sidebar() {
     </aside>
   )
 }
+
+export default Sidebar

@@ -1,6 +1,7 @@
+import { NextPage } from 'next'
 import styles from 'styles/Home.module.css'
 
-export default function Home() {
+const Home: NextPage = () => {
   return (
     <>
       <h1 className={styles.title}>
@@ -31,3 +32,5 @@ export default function Home() {
     </>
   )
 }
+
+export default Home

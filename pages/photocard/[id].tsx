@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 
 import styles from 'styles/Home.module.css'
 
-export default function Photocard() {
+const Photocard: React.FC = () => {
   const router = useRouter()
   const { id } = router.query
 
@@ -13,3 +13,5 @@ export default function Photocard() {
     </div>
   )
 }
+
+export default Photocard

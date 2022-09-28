@@ -16,5 +16,23 @@ exports[`Home renders a heading 1`] = `
     <br />
     VRC 유저의 개인 블로그 입니다.
   </p>
+  <p
+    class="description"
+  >
+    好きな曲 ↓
+  </p>
+  <div
+    class="video-container"
+  >
+    <iframe
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen=""
+      frameborder="0"
+      height="315"
+      src="https://www.youtube.com/embed/2b1IexhKPz4"
+      title="YouTube video player"
+      width="560"
+    />
+  </div>
 </div>
 `;

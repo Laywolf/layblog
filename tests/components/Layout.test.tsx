@@ -1,8 +1,7 @@
 import mockRouter from 'next-router-mock'
 import { render, screen } from '@testing-library/react'
 
-import MyApp, { hiddenLayoutPages } from 'pages/_app'
-import Home from 'pages/index'
+import Layout, { hiddenLayoutPages } from 'components/Layout'
 
 jest.mock('next/router', () => require('next-router-mock'))
 
@@ -10,7 +9,7 @@ describe('MyApp', () => {
   it('displays Layout normally', () => {
     mockRouter.setCurrentUrl('/')
 
-    render(<MyApp Component={Home} pageProps={undefined} />)
+    render(<Layout />)
 
     const header = screen.queryByRole('banner')
     const footer = screen.queryByRole('contentinfo')
@@ -24,9 +23,9 @@ describe('MyApp', () => {
   it('do not display Layout on specific routes', () => {
     hiddenLayoutPages.forEach((page) => {
       mockRouter.setCurrentUrl('/')
-      mockRouter.push('/' + page)
+      void mockRouter.push('/' + page)
 
-      render(<MyApp Component={Home} pageProps={undefined} />)
+      render(<Layout />)
 
       const header = screen.queryByRole('banner')
       const footer = screen.queryByRole('contentinfo')
