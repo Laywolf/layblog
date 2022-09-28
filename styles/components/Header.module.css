@@ -1,0 +1,9 @@
+.header nav ul {
+  display: flex;
+}
+
+.header nav ul li {
+  margin: 10px;
+  padding: 5px;
+  list-style: none;
+}
