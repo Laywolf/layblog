@@ -14,7 +14,7 @@ export default function Home() {
         VRC 유저의 개인 블로그 입니다.
       </p>
 
-      <p className={styles.description}>好きな曲　&darr;</p>
+      <p className={styles.description}>好きな曲 &darr;</p>
       <div className={styles['video-container']}>
         <iframe
           width="560"
