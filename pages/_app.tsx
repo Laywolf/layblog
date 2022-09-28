@@ -1,13 +1,19 @@
 import Layout from 'components/Layout'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
+import type { FC } from 'react'
 
 import 'styles/globals.css'
 
-//export for testing hideLayout
+//export to test hideLayout
 export const hiddenLayoutPages = ['photocard']
 
-const HidableLayout = ({ condition, children }) => {
-  return condition ? children : <Layout>{children}</Layout>
+interface hidableLayoutProps {
+  condition: boolean
+  children: React.ReactNode
+}
+const HidableLayout: FC<hidableLayoutProps> = ({ condition, children }) => {
+  return condition ? <>{children}</> : <Layout>{children}</Layout>
 }
 
 export default function MyApp({ Component, pageProps }) {
@@ -17,6 +23,11 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <HidableLayout condition={hideLayout}>
+      <Head>
+        <title>KanataHanayuki&apos;s mini blog</title>
+        <meta name="description" content="My mini VRChat gallery" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Component {...pageProps} />
     </HidableLayout>
   )
