@@ -6,11 +6,10 @@ const repository = 'layblog'
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  assetPrefix: !debug ? `/${repository}/` : '.',
+  assetPrefix: !debug ? `/${repository}/` : undefined,
   trailingSlash: true,
   images: {
-    loader: 'akamai',
-    path: '.',
+    domains: ['github.com'],
   },
 }
 
