@@ -1,16 +1,17 @@
 /** @type {import('next').NextConfig} */
 
-const debug = process.env.NODE_ENV !== 'production'
-const repository = 'layblog'
+// no prefix for vercel deploy
+// const debug = process.env.NODE_ENV !== 'production'
+// const repository = 'layblog'
 
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  assetPrefix: !debug ? `/${repository}/` : '.',
+  // no prefix for vercel deploy
+  assetPrefix: /*! debug ? `/${repository}/` : */ undefined,
   trailingSlash: true,
   images: {
-    loader: 'akamai',
-    path: '.',
+    domains: ['github.com'],
   },
 }
 

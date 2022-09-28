@@ -1,0 +1,16 @@
+import { NextPage } from 'next'
+import { Head, Html, Main, NextScript } from 'next/document'
+
+const Document: NextPage = () => {
+  return (
+    <Html>
+      <Head />
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  )
+}
+
+export default Document
