@@ -16,7 +16,8 @@
         "allowString": false,
         "allowNumber": false
       }
-    ]
+    ],
+    "prettier/prettier": ["error", { "endOfLine": "auto" }]
   },
   "ignorePatterns": ["src/**/*.test.ts", "src/frontend/generated/*"]
 }
