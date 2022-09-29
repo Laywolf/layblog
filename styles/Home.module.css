@@ -73,9 +73,13 @@
   line-height: 1.5;
 }
 
+.video-anchor {
+  width: 100%;
+  max-width: 1024px;
+}
+
 .video-container {
   position: relative;
-  padding-top: 30px;
   padding-bottom: 56.25%;
   width: 100%;
   height: 0;

@@ -16,18 +16,20 @@ const Home: NextPage = () => {
       </p>
 
       <p className={styles.description}>好きな曲 &darr;</p>
-      <div className={styles['video-container']}>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/2b1IexhKPz4"
-          title="YouTube video
+      <div className={styles['video-anchor']}>
+        <div className={styles['video-container']}>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/2b1IexhKPz4"
+            title="YouTube video
           player"
-          frameBorder="0"
-          allow="accelerometer; autoplay;
+            frameBorder="0"
+            allow="accelerometer; autoplay;
           clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+            allowFullScreen
+          ></iframe>
+        </div>
       </div>
     </>
   )
