@@ -9,6 +9,7 @@
 - 게시판 기능
 - 사진 갤러리 기능
 - About 페이지
+- 방명록
 
 ## Deploy on Vercel
 
