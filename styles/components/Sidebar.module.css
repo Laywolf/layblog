@@ -18,6 +18,7 @@
   transform: translate(calc(-100% + 1rem), calc(10% + 1rem));
   width: max-content;
   height: max-content;
+  pointer-events: none;
 }
 .sidebarTagImage span {
   border-radius: 1rem;

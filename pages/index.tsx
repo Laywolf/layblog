@@ -1,6 +1,10 @@
 import { NextPage } from 'next'
 import styles from 'styles/Common.module.css'
 
+const GuestBook: React.FC = () => {
+  return <div></div>
+}
+
 const Home: NextPage = () => {
   return (
     <>

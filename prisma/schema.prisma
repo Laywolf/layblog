@@ -17,3 +17,12 @@ model Board {
   content   String
   published Boolean
 }
+
+model GuestBook {
+  id        Int     @default(autoincrement()) @id
+  author    String
+  ip        String
+  content   String  
+  date      DateTime
+  hidden    Boolean
+}
