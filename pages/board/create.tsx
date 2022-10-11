@@ -1,12 +1,49 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, TextField } from '@mui/material'
 import { Box, Container } from '@mui/system'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import React from 'react'
+import { SubmitHandler } from 'react-hook-form/dist/types'
+import { useForm } from 'react-hook-form'
 
 import styles from 'styles/Common.module.css'
+import { z } from 'zod'
+
+const boardSchema = z.object({
+  title: z.string().min(1, '제목을 입력해 주세요.').max(80),
+  author: z.string().min(1, '작성자를 입력해 주세요.').max(20),
+  content: z.string().min(1, '내용을 입력해 주세요.'),
+})
+
+type Board = z.infer<typeof boardSchema>
 
 const CreateBoard: NextPage = () => {
   const router = useRouter()
+
+  const defaultValues: Board = {
+    title: '',
+    author: '',
+    content: '',
+  }
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(boardSchema),
+  })
+
+  const onSubmit = (...args): void => {
+    console.log('hello?')
+    void (async () => await handleSubmit(submit)(...args))()
+  }
+
+  const submit: SubmitHandler<Board> = (data) => {
+    // 이거 왜 호출이 안되지?
+    console.log(data)
+  }
 
   const goBack = (): void => {
     void (async () => await router.push('/board'))()
@@ -20,7 +57,7 @@ const CreateBoard: NextPage = () => {
         component="form"
         autoComplete="off"
         noValidate
-        onSubmit={goBack}
+        onSubmit={onSubmit}
         sx={{
           '& > :not(style)': { m: '8px 0', width: '100%' },
         }}
@@ -32,10 +69,10 @@ const CreateBoard: NextPage = () => {
             '& > :not(style)': { width: '100%' },
           }}
         >
-          <TextField id="title" label="제목" />
-          <TextField id="author" label="작성자" defaultValue="익명" />
+          <TextField required autoFocus id="title" label="제목" />
+          <TextField required id="author" label="작성자" defaultValue="익명" />
         </Box>
-        <TextField id="content" label="내용" multiline minRows={8} />
+        <TextField required id="content" label="내용" multiline minRows={8} />
         <Box
           sx={{
             display: 'flex',
