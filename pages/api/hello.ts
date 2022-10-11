@@ -5,8 +5,8 @@ interface Data {
   name: string
 }
 
-const handler = (req: NextApiRequest, res: NextApiResponse<Data>): void => {
-  res.status(200).json({ name: 'John Doe' })
+const hello = (req: NextApiRequest, res: NextApiResponse<Data>): void => {
+  res.status(200).json({ name: 'Kanata Hanayuki' })
 }
 
-export default handler
+export default hello
