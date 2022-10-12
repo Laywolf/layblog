@@ -14,8 +14,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@hookform/resolvers": "^2.9.8",
-    "@mui/icons-material": "^5.10.6",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/lab": "^5.0.0-alpha.103",
     "@mui/material": "^5.10.8",
     "@mui/styles": "^5.10.8",
     "@prisma/client": "^4.4.0",
@@ -24,7 +24,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.37.0",
-    "zod": "^3.19.1",
     "react-social-icons": "^5.15.0"
   },
   "devDependencies": {
