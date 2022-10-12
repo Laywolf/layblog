@@ -1,48 +1,71 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, TextField } from '@mui/material'
+import CreateIcon from '@mui/icons-material/Create'
+import ClearIcon from '@mui/icons-material/Clear'
+import { LoadingButton } from '@mui/lab'
+import { Button } from '@mui/material'
 import { Box, Container } from '@mui/system'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import React from 'react'
-import { SubmitHandler } from 'react-hook-form/dist/types'
-import { useForm } from 'react-hook-form'
+import { useState } from 'react'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import axios from 'axios'
 
 import styles from 'styles/Common.module.css'
-import { z } from 'zod'
+import TextField from 'components/form/TextField'
+import Dialog from 'components/Dialog'
 
-const boardSchema = z.object({
-  title: z.string().min(1, '제목을 입력해 주세요.').max(80),
-  author: z.string().min(1, '작성자를 입력해 주세요.').max(20),
-  content: z.string().min(1, '내용을 입력해 주세요.'),
+interface Board {
+  title: string
+  author: string
+  content: string
+}
+
+const defaultValues: Board = {
+  title: '',
+  author: '익명',
+  content: '',
+}
+
+const helper = {
+  title: '제목을 입력해 주세요.',
+  author: '작성자명을 입력해 주세요.',
+  content: '내용을 입력해 주세요.',
+}
+
+interface IDialog {
+  title: string
+  content: string
+}
+
+const defaultDialog = (error): IDialog => ({
+  title: '네트워크 오류 발생',
+  content: error,
 })
-
-type Board = z.infer<typeof boardSchema>
 
 const CreateBoard: NextPage = () => {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [dialog, setDialog] = useState(defaultDialog(''))
 
-  const defaultValues: Board = {
-    title: '',
-    author: '',
-    content: '',
-  }
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(boardSchema),
+  const { control, handleSubmit } = useForm({
+    defaultValues,
   })
 
   const onSubmit = (...args): void => {
-    console.log('hello?')
-    void (async () => await handleSubmit(submit)(...args))()
+    void (async () => await handleSubmit(submit, undefined)(...args))()
   }
 
-  const submit: SubmitHandler<Board> = (data) => {
-    // 이거 왜 호출이 안되지?
-    console.log(data)
+  const submit: SubmitHandler<Board> = async (data) => {
+    setLoading(true)
+
+    try {
+      await axios.post('/api/post', data)
+      goBack()
+    } catch (error) {
+      setDialog(defaultDialog(error.message))
+      setDialogOpen(true)
+      setLoading(false)
+    }
   }
 
   const goBack = (): void => {
@@ -69,10 +92,28 @@ const CreateBoard: NextPage = () => {
             '& > :not(style)': { width: '100%' },
           }}
         >
-          <TextField required autoFocus id="title" label="제목" />
-          <TextField required id="author" label="작성자" defaultValue="익명" />
+          <TextField
+            control={control}
+            rules={{ required: helper.title }}
+            autoFocus
+            id="title"
+            label="제목"
+          />
+          <TextField
+            control={control}
+            rules={{ required: helper.author }}
+            id="author"
+            label="작성자"
+          />
         </Box>
-        <TextField required id="content" label="내용" multiline minRows={8} />
+        <TextField
+          control={control}
+          rules={{ required: helper.content }}
+          id="content"
+          label="내용"
+          multiline
+          minRows={8}
+        />
         <Box
           sx={{
             display: 'flex',
@@ -80,14 +121,27 @@ const CreateBoard: NextPage = () => {
             justifyContent: 'right',
           }}
         >
-          <Button type="submit" variant="contained">
-            등록하기
+          <Button onClick={goBack} variant="outlined" endIcon={<ClearIcon />}>
+            취소
           </Button>
-          <Button onClick={goBack} variant="outlined">
-            취소하기
-          </Button>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            loading={loading}
+            endIcon={<CreateIcon />}
+            loadingPosition="end"
+          >
+            등록
+          </LoadingButton>
         </Box>
       </Box>
+      <Dialog
+        id="board-create"
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        title={dialog.title}
+        content={dialog.content}
+      />
     </Container>
   )
 }

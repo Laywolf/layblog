@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Board {
+model Post {
   id        Int     @default(autoincrement()) @id
   title     String
   author    String
