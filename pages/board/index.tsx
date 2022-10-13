@@ -20,27 +20,6 @@ import { Box } from '@mui/system'
 import { useRouter } from 'next/router'
 // import { useRouter } from 'next/router'
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query: { page = '1' },
-}) => {
-  try {
-    if (typeof page !== 'string') throw Error()
-    const posts = await getPosts(parseInt(page))
-    const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
-    return {
-      props: {
-        posts: posts.map(({ date, ...post }) => ({
-          ...post,
-          date: date.toLocaleDateString() + date.toLocaleTimeString(),
-        })),
-        pages,
-      },
-    }
-  } catch (error) {
-    return { props: {} }
-  }
-}
-
 interface IPost {
   id: number
   author: string
@@ -185,3 +164,24 @@ const Board: NextPage<IProps> = ({ posts, pages }) => {
 }
 
 export default Board
+
+export const getServerSideProps: GetServerSideProps = async ({
+  query: { page = '1' },
+}) => {
+  try {
+    if (typeof page !== 'string') throw Error()
+    const posts = await getPosts(parseInt(page))
+    const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
+    return {
+      props: {
+        posts: posts.map(({ date, ...post }) => ({
+          ...post,
+          date: date.toLocaleDateString() + date.toLocaleTimeString(),
+        })),
+        pages,
+      },
+    }
+  } catch (error) {
+    return { props: {} }
+  }
+}

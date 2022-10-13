@@ -1,29 +1,10 @@
-import { GetServerSideProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import { getPost } from 'pages/api/posts/[pid]'
 import { Box, Button, Grid, Typography } from '@mui/material'
 
 import Link from 'next/link'
 import { ArrowBackIosNew } from '@mui/icons-material'
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  try {
-    if (params === undefined) throw Error('no param')
-    if (typeof params.id !== 'string') throw Error('id is not string')
-
-    const id = parseInt(params.id)
-    if (isNaN(id)) throw Error()
-
-    const post = await getPost(id)
-    return {
-      props: {
-        ...post,
-        date: post.date.toLocaleDateString() + post.date.toLocaleTimeString(),
-      },
-    }
-  } catch (error) {
-    return { props: {} }
-  }
-}
+import { getPosts } from 'pages/api/posts'
 
 interface IPost {
   title: string
@@ -60,3 +41,31 @@ const Post: React.FC<IPost> = (props) => {
 }
 
 export default Post
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  try {
+    if (params === undefined) throw Error('no param')
+    if (typeof params.id !== 'string') throw Error('id is not string')
+
+    const id = parseInt(params.id)
+    if (isNaN(id)) throw Error()
+
+    const post = await getPost(id)
+    return {
+      props: {
+        ...post,
+        date: post.date.toLocaleDateString() + post.date.toLocaleTimeString(),
+      },
+      revalidate: 10,
+    }
+  } catch (error) {
+    return { notFound: true }
+  }
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await getPosts()
+
+  const paths = posts.map((post) => ({ params: { id: String(post.id) } }))
+  return { paths, fallback: 'blocking' }
+}

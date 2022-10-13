@@ -1,4 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { Prisma } from '@prisma/client'
+import prisma from 'lib/prisma'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -10,8 +11,6 @@ interface Result {
   success: boolean
   message: string | Record<string, unknown>
 }
-
-const prisma = new PrismaClient()
 
 const guestBook = async (
   req: NextApiRequestForGuestBook,

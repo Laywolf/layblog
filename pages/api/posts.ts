@@ -1,8 +1,18 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { Prisma } from '@prisma/client'
+import prisma from 'lib/prisma'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type TPost = Prisma.PostGetPayload<true>
+
+interface IPost {
+  id: number
+  author: string
+  title: string
+  date: Date
+  content: string
+  [x: string]: unknown
+}
 
 interface NextApiRequestForPost extends NextApiRequest {
   body: TPost
@@ -13,8 +23,6 @@ interface Result {
   message: string | Record<string, unknown> | Array<Record<string, unknown>>
 }
 
-const prisma = new PrismaClient()
-
 export const addPost = async (post: TPost): Promise<void> => {
   post.published = true
   post.date = new Date()
@@ -24,15 +32,7 @@ export const addPost = async (post: TPost): Promise<void> => {
   })
 }
 
-interface IPosts {
-  id: number
-  author: string
-  title: string
-  date: Date
-  content: string
-  [x: string]: unknown
-}
-export const getPosts = async (page?: number): Promise<IPosts[]> => {
+export const getPosts = async (page?: number): Promise<IPost[]> => {
   const posts = await prisma.post.findMany({
     select: {
       id: true,
@@ -76,8 +76,14 @@ const Post = async (
     }
   } else if (req.method === 'GET') {
     try {
-      const posts = await getPosts()
-      res.status(200).json({ success: true, message: posts })
+      console.log(req.query)
+      const { page } = req.query
+      const posts =
+        typeof page === 'string'
+          ? await getPosts(parseInt(page))
+          : await getPosts()
+      const pages = await getPostCount()
+      res.status(200).json({ success: true, message: { posts, pages } })
     } catch (error) {
       res.status(500).json({
         success: false,
