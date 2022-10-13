@@ -15,6 +15,7 @@ model Post {
   title     String
   author    String
   content   String
+  date      DateTime
   published Boolean
 }
 

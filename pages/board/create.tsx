@@ -1,5 +1,4 @@
-import CreateIcon from '@mui/icons-material/Create'
-import ClearIcon from '@mui/icons-material/Clear'
+import { Create, Clear } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { Button } from '@mui/material'
 import { Box, Container } from '@mui/system'
@@ -7,7 +6,6 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import axios from 'axios'
 
 import styles from 'styles/Common.module.css'
 import TextField from 'components/form/TextField'
@@ -29,6 +27,8 @@ const helper = {
   title: '제목을 입력해 주세요.',
   author: '작성자명을 입력해 주세요.',
   content: '내용을 입력해 주세요.',
+  maxName: { value: 20, message: '20자 까지 작성할 수 있습니다.' },
+  maxContent: { value: 180, message: '180자 까지 작성할 수 있습니다.' },
 }
 
 interface IDialog {
@@ -59,9 +59,16 @@ const CreateBoard: NextPage = () => {
     setLoading(true)
 
     try {
-      await axios.post('/api/post', data)
-      goBack()
+      await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }).then((res) => {
+        if (res.ok) goBack()
+        else throw Error(res.statusText)
+      })
     } catch (error) {
+      console.log(error)
       setDialog(defaultDialog(error.message))
       setDialogOpen(true)
       setLoading(false)
@@ -94,21 +101,21 @@ const CreateBoard: NextPage = () => {
         >
           <TextField
             control={control}
-            rules={{ required: helper.title }}
+            rules={{ required: helper.title, maxLength: helper.maxName }}
             autoFocus
             id="title"
             label="제목"
           />
           <TextField
             control={control}
-            rules={{ required: helper.author }}
+            rules={{ required: helper.author, maxLength: helper.maxName }}
             id="author"
             label="작성자"
           />
         </Box>
         <TextField
           control={control}
-          rules={{ required: helper.content }}
+          rules={{ required: helper.content, maxLength: helper.maxContent }}
           id="content"
           label="내용"
           multiline
@@ -121,14 +128,14 @@ const CreateBoard: NextPage = () => {
             justifyContent: 'right',
           }}
         >
-          <Button onClick={goBack} variant="outlined" endIcon={<ClearIcon />}>
+          <Button onClick={goBack} variant="outlined" endIcon={<Clear />}>
             취소
           </Button>
           <LoadingButton
             type="submit"
             variant="contained"
             loading={loading}
-            endIcon={<CreateIcon />}
+            endIcon={<Create />}
             loadingPosition="end"
           >
             등록

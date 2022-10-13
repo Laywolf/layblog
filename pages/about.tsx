@@ -1,3 +1,4 @@
+import { Box } from '@mui/system'
 import { NextPage } from 'next'
 import { SocialIcon } from 'react-social-icons'
 import styles from 'styles/Common.module.css'
@@ -23,7 +24,11 @@ const About: NextPage = () => {
       </p>
       <br />
       <h1 className={styles.title}>연락은 어디로?</h1>
-      <div className={styles.description}>
+      <Box
+        sx={{
+          '& > :not(style)': { m: 1, width: '100%' },
+        }}
+      >
         <SocialIcon target="_blank" url="https://discord.gg/dCxt2f2" />
         <SocialIcon
           defaultSVG={vrchat}
@@ -31,7 +36,7 @@ const About: NextPage = () => {
           target="_blank"
           url="https://vrchat.com/home/user/usr_8fd691ee-fbeb-4628-a129-c46e9aecfe47"
         />
-      </div>
+      </Box>
     </>
   )
 }

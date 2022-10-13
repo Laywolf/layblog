@@ -7,7 +7,7 @@ import styles from 'styles/components/Layout.module.css'
 import { useRouter } from 'next/router'
 
 // export to test hideLayout
-export const hiddenLayoutPages = ['photocard']
+export const hiddenLayoutPages = ['api', 'photocard']
 
 interface Props {
   children?: React.ReactNode
@@ -23,7 +23,7 @@ const Layout: React.FC<Props> = ({ children }) => {
     <div className={styles.container}>
       <Header />
       <main className={styles.main}>
-        <section className={styles.section} style={{ width: '1024px' }}>
+        <section className={styles.section} style={{ width: '80vh' }}>
           {children}
         </section>
         <SideBar />
