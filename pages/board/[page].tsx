@@ -109,7 +109,7 @@ interface IProps {
 const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
   const router = useRouter()
   const handlePaginationClick = (_, page: number): void => {
-    void (async () => await router.push({ query: { page: page.toString() } }))()
+    void (async () => await router.push(`/board/${page}`))()
   }
 
   return (
