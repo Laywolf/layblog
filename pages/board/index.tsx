@@ -17,7 +17,8 @@ import styles from 'styles/Common.module.css'
 import React from 'react'
 import { Box } from '@mui/system'
 import { useRouter } from 'next/router'
-import { getPostCount, getPosts } from 'lib/prisma/posts'
+import prisma from 'lib/prisma'
+// import { getPostCount, getPosts } from 'lib/prisma/posts'
 // import { useRouter } from 'next/router'
 
 interface IPost {
@@ -171,11 +172,33 @@ export const getServerSideProps: GetServerSideProps = async ({
   try {
     if (typeof page !== 'string') throw Error()
     // const posts = await getPosts(parseInt(page))
-    const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
+    const posts = await prisma.post.findMany({
+      select: {
+        id: true,
+        author: true,
+        title: true,
+        date: true,
+        content: true,
+      },
+      where: {
+        published: {
+          equals: true,
+        },
+      },
+      orderBy: {
+        id: 'desc',
+      },
+      skip: page !== undefined ? (parseInt(page) - 1) * 10 : undefined,
+      take: page !== undefined ? 10 : undefined,
+    })
+    // const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
     return {
       props: {
-        posts: [],
-        pages,
+        posts: posts.map(({ date, ...post }) => ({
+          ...post,
+          date: date.toLocaleDateString() + date.toLocaleTimeString(),
+        })),
+        pages: 1,
       },
     }
   } catch (error) {
