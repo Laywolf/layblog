@@ -1,10 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { getPost } from 'pages/api/posts/[pid]'
 import { Box, Button, Grid, Typography } from '@mui/material'
 
 import Link from 'next/link'
 import { ArrowBackIosNew } from '@mui/icons-material'
-import { getPosts } from 'pages/api/posts'
+import { getPost, getPosts } from 'lib/prisma/posts'
 
 interface IPost {
   title: string
