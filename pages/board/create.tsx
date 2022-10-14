@@ -75,7 +75,7 @@ const CreateBoard: NextPage = () => {
   }
 
   const goBack = (): void => {
-    void (async () => await router.push('/board'))()
+    void (async () => await router.push('/board/1'))()
   }
 
   return (

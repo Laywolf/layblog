@@ -16,7 +16,7 @@ model Post {
   author    String
   content   String
   date      DateTime  @default(now())
-  published Boolean
+  published Boolean   @default(true)
 }
 
 model GuestBook {
