@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import prisma from 'lib/prisma'
+import { getPost } from 'lib/prisma/posts'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -12,16 +12,6 @@ interface NextApiRequestForPost extends NextApiRequest {
 interface Result {
   success: boolean
   message: string | Record<string, unknown> | Array<Record<string, unknown>>
-}
-
-export const getPost = async (pid: number): Promise<TPost> => {
-  const post = await prisma.post.findFirstOrThrow({
-    where: {
-      id: pid,
-      published: true,
-    },
-  })
-  return post
 }
 
 const PostId = async (

@@ -12,12 +12,12 @@ import {
 import { Article, Create } from '@mui/icons-material'
 import { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link'
-import { getPosts, getPostCount } from 'pages/api/posts'
 
 import styles from 'styles/Common.module.css'
 import React from 'react'
 import { Box } from '@mui/system'
 import { useRouter } from 'next/router'
+import { getPostCount, getPosts } from 'lib/prisma/posts'
 // import { useRouter } from 'next/router'
 
 interface IPost {
