@@ -68,7 +68,6 @@ const CreateBoard: NextPage = () => {
         else throw Error(res.statusText)
       })
     } catch (error) {
-      console.log(error)
       setDialog(defaultDialog(error.message))
       setDialogOpen(true)
       setLoading(false)

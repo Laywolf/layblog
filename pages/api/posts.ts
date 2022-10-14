@@ -31,7 +31,6 @@ const Post = async (
     }
   } else if (req.method === 'GET') {
     try {
-      console.log(req.query)
       const { page } = req.query
       const posts =
         typeof page === 'string'

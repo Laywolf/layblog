@@ -169,6 +169,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   query: { page = '1' },
 }) => {
   try {
+    console.log(page, typeof page)
     if (typeof page !== 'string') throw Error()
     const posts = await getPosts(parseInt(page)).then((res) =>
       JSON.parse(JSON.stringify(res)),
