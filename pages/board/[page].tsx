@@ -106,7 +106,7 @@ interface IProps {
   pages: number
 }
 
-const Board: NextPage<IProps> = ({ posts, pages }) => {
+const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
   const router = useRouter()
   const handlePaginationClick = (_, page: number): void => {
     void (async () => await router.push({ query: { page: page.toString() } }))()
@@ -163,7 +163,7 @@ const Board: NextPage<IProps> = ({ posts, pages }) => {
   )
 }
 
-export default Board
+export default BoardPage
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
