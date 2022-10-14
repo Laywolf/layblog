@@ -170,16 +170,12 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   try {
     if (typeof page !== 'string') throw Error()
-    const posts = await getPosts(parseInt(page))
+    const posts = await getPosts(parseInt(page)).then((res) =>
+      JSON.parse(JSON.stringify(res)),
+    )
     const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
     return {
-      props: {
-        posts: posts.map(({ date, ...post }) => ({
-          ...post,
-          date: date.toLocaleDateString() + date.toLocaleTimeString(),
-        })),
-        pages,
-      },
+      props: { posts, pages },
     }
   } catch (error) {
     return { props: {} }

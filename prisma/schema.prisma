@@ -11,19 +11,19 @@ datasource db {
 }
 
 model Post {
-  id        Int     @default(autoincrement()) @id
+  id        Int       @default(autoincrement()) @id
   title     String
   author    String
   content   String
-  date      DateTime
+  date      DateTime  @default(now())
   published Boolean
 }
 
 model GuestBook {
-  id        Int     @default(autoincrement()) @id
+  id        Int       @default(autoincrement()) @id
   author    String
   ip        String
   content   String  
-  date      DateTime
+  date      DateTime  @default(now())
   hidden    Boolean
 }

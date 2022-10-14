@@ -14,7 +14,6 @@ interface IPost {
 
 export const addPost = async (post: TPost): Promise<void> => {
   post.published = true
-  post.date = new Date()
 
   await prisma.post.create({
     data: post,
