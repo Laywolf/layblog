@@ -1,3 +1,4 @@
+import { CssBaseline } from '@mui/material'
 import Layout from 'components/Layout'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
@@ -12,6 +13,7 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
         <meta name="description" content="My mini VRChat gallery" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <CssBaseline />
       <Component {...pageProps} />
     </Layout>
   )

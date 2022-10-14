@@ -1,13 +1,27 @@
-.SidebarCard {
+.sidebarCard {
   margin: 3rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .sidebarTag p {
   display: block;
-  padding: 5px;
   background-color: black;
   color: white;
   border-radius: 10px;
   text-align: center;
   padding: 2px;
   cursor: pointer;
+}
+.sidebarTagImage {
+  position: absolute;
+  transform: translate(calc(-100% + 1rem), calc(10% + 1rem));
+  width: max-content;
+  height: max-content;
+  pointer-events: none;
+}
+.sidebarTagImage span {
+  border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: block !important;
 }

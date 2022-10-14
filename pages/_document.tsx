@@ -1,16 +1,33 @@
-import { NextPage } from 'next'
-import { Head, Html, Main, NextScript } from 'next/document'
+import ServerStyleSheets from '@mui/styles/ServerStyleSheets'
+import Document, { Head, Html, Main, NextScript } from 'next/document'
 
-const Document: NextPage = () => {
-  return (
-    <Html>
-      <Head />
-      <body>
-        <Main />
-        <NextScript />
-      </body>
-    </Html>
-  )
+export default class MyDocument extends Document {
+  render(): JSX.Element {
+    return (
+      <Html>
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    )
+  }
 }
 
-export default Document
+MyDocument.getInitialProps = async (context) => {
+  const materialSheets = new ServerStyleSheets()
+  const originalRenderPage = context.renderPage
+
+  context.renderPage = () =>
+    originalRenderPage({
+      enhanceApp: (App) => (props) =>
+        materialSheets.collect(<App {...props} />),
+    })
+
+  const initialProps = await Document.getInitialProps(context)
+  return {
+    ...initialProps,
+    styles: <>{initialProps.styles}</>,
+  }
+}

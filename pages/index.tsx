@@ -1,5 +1,9 @@
 import { NextPage } from 'next'
-import styles from 'styles/Home.module.css'
+import styles from 'styles/Common.module.css'
+
+const GuestBook: React.FC = () => {
+  return <div></div>
+}
 
 const Home: NextPage = () => {
   return (
@@ -16,18 +20,19 @@ const Home: NextPage = () => {
       </p>
 
       <p className={styles.description}>好きな曲 &darr;</p>
-      <div className={styles['video-container']}>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/2b1IexhKPz4"
-          title="YouTube video
-          player"
-          frameBorder="0"
-          allow="accelerometer; autoplay;
-          clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+      <div className={styles['video-anchor']}>
+        <div className={styles['video-container']}>
+          <iframe
+            width="560"
+            height="315"
+            style={{ border: 0 }}
+            src="https://www.youtube.com/embed/2b1IexhKPz4"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write;
+            encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
       </div>
     </>
   )
