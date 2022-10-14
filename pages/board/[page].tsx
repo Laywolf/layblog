@@ -10,15 +10,14 @@ import {
   Pagination,
 } from '@mui/material'
 import { Article, Create } from '@mui/icons-material'
-import { GetServerSideProps, NextPage } from 'next'
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 
 import styles from 'styles/Common.module.css'
 import React from 'react'
 import { Box } from '@mui/system'
 import { useRouter } from 'next/router'
-import prisma from 'lib/prisma'
-// import { getPostCount, getPosts } from 'lib/prisma/posts'
+import { getPostCount, getPosts } from 'lib/prisma/posts'
 // import { useRouter } from 'next/router'
 
 interface IPost {
@@ -40,7 +39,7 @@ const Post: React.FC<IPost> = (props) => {
 
   const handleClick = (): void => {
     setOpen(!open)
-    // void (async () => await router.push('/board/' + id.toString()))()
+    // void (async () => await router.push('/board/view/' + id.toString()))()
   }
 
   return (
@@ -166,42 +165,42 @@ const Board: NextPage<IProps> = ({ posts, pages }) => {
 
 export default Board
 
-export const getServerSideProps: GetServerSideProps = async ({
-  query: { page = '1' },
-}) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   try {
+    const page = context.params ? context.params.page : undefined
     if (typeof page !== 'string') throw Error()
-    // const posts = await getPosts(parseInt(page))
-    const posts = await prisma.post.findMany({
-      select: {
-        id: true,
-        author: true,
-        title: true,
-        date: true,
-        content: true,
-      },
-      where: {
-        published: {
-          equals: true,
-        },
-      },
-      orderBy: {
-        id: 'desc',
-      },
-      skip: page !== undefined ? (parseInt(page) - 1) * 10 : undefined,
-      take: page !== undefined ? 10 : undefined,
-    })
-    // const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
+    const posts = await getPosts(parseInt(page))
+    const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
     return {
       props: {
         posts: posts.map(({ date, ...post }) => ({
           ...post,
           date: date.toLocaleDateString() + date.toLocaleTimeString(),
         })),
-        pages: 1,
+        pages,
       },
+      revalidate: 10,
     }
   } catch (error) {
     return { props: {} }
+  }
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
+    return {
+      fallback: true,
+      paths: Array.from(Array(pages), (_, i) => ({
+        params: {
+          page: String(i + 1),
+        },
+      })),
+    }
+  } catch (error) {
+    return {
+      fallback: true,
+      paths: [],
+    }
   }
 }
