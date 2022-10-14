@@ -21,7 +21,6 @@ export const addPost = async (post: TPost): Promise<void> => {
 }
 
 export const getPosts = async (page?: number): Promise<IPost[]> => {
-  console.log('fetching posts...')
   const posts = await prisma.post.findMany({
     select: {
       id: true,
@@ -41,7 +40,6 @@ export const getPosts = async (page?: number): Promise<IPost[]> => {
     skip: page !== undefined ? (page - 1) * 10 : undefined,
     take: page !== undefined ? 10 : undefined,
   })
-  console.log('fetching posts finished.')
   return posts
 }
 
