@@ -1,7 +1,9 @@
-import { Create, Clear } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Button } from '@mui/material'
-import { Box, Container } from '@mui/system'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CreateIcon from '@mui/icons-material/Create'
+import ClearIcon from '@mui/icons-material/Clear'
+import LoadingButton from '@mui/lab/LoadingButton'
+import Container from '@mui/material/Container'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -127,14 +129,14 @@ const CreateBoard: NextPage = () => {
             justifyContent: 'right',
           }}
         >
-          <Button onClick={goBack} variant="outlined" endIcon={<Clear />}>
+          <Button onClick={goBack} variant="outlined" endIcon={<ClearIcon />}>
             취소
           </Button>
           <LoadingButton
             type="submit"
             variant="contained"
             loading={loading}
-            endIcon={<Create />}
+            endIcon={<CreateIcon />}
             loadingPosition="end"
           >
             등록

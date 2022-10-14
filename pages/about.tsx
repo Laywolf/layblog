@@ -1,6 +1,7 @@
-import { Box } from '@mui/system'
+import Box from '@mui/material/Box'
 import { NextPage } from 'next'
 import { SocialIcon } from 'react-social-icons'
+
 import styles from 'styles/Common.module.css'
 
 const vrchat = {

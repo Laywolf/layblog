@@ -1,11 +1,9 @@
-import {
-  Dialog as DialogMUI,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-} from '@mui/material'
+import MuiDialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 import React from 'react'
 
 interface IProps {
@@ -31,7 +29,7 @@ const Dialog: React.FC<IProps> = (props) => {
   const descriptionId = id + '-description'
 
   return (
-    <DialogMUI
+    <MuiDialog
       open={open}
       onClose={handleClose}
       aria-labelledby={titleId}
@@ -47,7 +45,7 @@ const Dialog: React.FC<IProps> = (props) => {
         ) : undefined}
         <Button onClick={handleClose(true)}>{ok ?? '확인'}</Button>
       </DialogActions>
-    </DialogMUI>
+    </MuiDialog>
   )
 }
 

@@ -1,4 +1,5 @@
-import { TextField as TextFieldMUI, TextFieldProps } from '@mui/material'
+import MuiTextField, { TextFieldProps } from '@mui/material/TextField'
+
 import { Control, Controller, UseControllerProps } from 'react-hook-form'
 
 interface IProps {
@@ -17,7 +18,7 @@ const TextField: React.FC<IProps & TextFieldProps> = (props) => {
       rules={rules}
       control={control}
       render={({ field: { value, onChange }, fieldState: { error } }) => (
-        <TextFieldMUI
+        <MuiTextField
           {...textFieldProps}
           value={value}
           onChange={onChange}

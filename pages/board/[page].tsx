@@ -1,22 +1,22 @@
-import {
-  Button,
-  Collapse,
-  Container,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-  Pagination,
-} from '@mui/material'
-import { Article, Create } from '@mui/icons-material'
+import Button from '@mui/material/Button'
+import Collapse from '@mui/material/Collapse'
+import Container from '@mui/material/Container'
+import List from '@mui/material/List'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import ListSubheader from '@mui/material/ListSubheader'
+import Pagination from '@mui/material/Pagination'
+import Box from '@mui/material/Box'
+
+import ArticleIcon from '@mui/icons-material/Article'
+import CreateIcon from '@mui/icons-material/Create'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React from 'react'
 
 import styles from 'styles/Common.module.css'
-import React from 'react'
-import { Box } from '@mui/system'
-import { useRouter } from 'next/router'
 import { getPostCount, getPosts } from 'lib/prisma/posts'
 // import { useRouter } from 'next/router'
 
@@ -53,7 +53,7 @@ const Post: React.FC<IPost> = (props) => {
         }}
       >
         <ListItemIcon>
-          <Article />
+          <ArticleIcon />
         </ListItemIcon>
         <ListItemText
           primary={id}
@@ -117,7 +117,7 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
       <h1 className={styles.title}>게시판</h1>
       <Box sx={{ display: 'flex', justifyContent: 'right' }}>
         <Link href="/board/create">
-          <Button variant="contained" endIcon={<Create />}>
+          <Button variant="contained" endIcon={<CreateIcon />}>
             작성
           </Button>
         </Link>
@@ -166,41 +166,31 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
 export default BoardPage
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  try {
-    const page = context.params ? context.params.page : undefined
-    if (typeof page !== 'string') throw Error()
-    const posts = await getPosts(parseInt(page))
-    const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
-    return {
-      props: {
-        posts: posts.map(({ date, ...post }) => ({
-          ...post,
-          date: date.toLocaleDateString() + date.toLocaleTimeString(),
-        })),
-        pages,
-      },
-      revalidate: 10,
-    }
-  } catch (error) {
-    return { props: {} }
+  const page = context.params ? context.params.page : undefined
+  if (typeof page !== 'string') throw Error()
+  const posts = await getPosts(parseInt(page))
+  const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
+
+  return {
+    props: {
+      posts: posts.map(({ date, ...post }) => ({
+        ...post,
+        date: date.toLocaleDateString() + date.toLocaleTimeString(),
+      })),
+      pages,
+    },
+    revalidate: 10,
   }
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  try {
-    const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
-    return {
-      fallback: true,
-      paths: Array.from(Array(pages), (_, i) => ({
-        params: {
-          page: String(i + 1),
-        },
-      })),
-    }
-  } catch (error) {
-    return {
-      fallback: true,
-      paths: [],
-    }
+  const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
+  return {
+    fallback: true,
+    paths: Array.from(Array(pages), (_, i) => ({
+      params: {
+        page: String(i + 1),
+      },
+    })),
   }
 }

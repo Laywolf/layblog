@@ -1,8 +1,12 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
-import { Box, Button, Grid, Typography } from '@mui/material'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
 
+import { GetStaticPaths, GetStaticProps } from 'next'
 import Link from 'next/link'
-import { ArrowBackIosNew } from '@mui/icons-material'
+
 import { getPost, getPosts } from 'lib/prisma/posts'
 
 interface IPost {
@@ -25,7 +29,7 @@ const Post: React.FC<IPost> = (props) => {
         </Grid>
         <Grid item>
           <Link href="/board">
-            <Button variant="text" startIcon={<ArrowBackIosNew />}>
+            <Button variant="text" startIcon={<ArrowBackIosNewIcon />}>
               목록
             </Button>
           </Link>
