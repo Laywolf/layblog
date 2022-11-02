@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 
 import { getPost, getPosts } from 'lib/prisma/posts'
@@ -16,7 +16,7 @@ interface IPost {
   content: string
 }
 
-const Post: React.FC<IPost> = (props) => {
+const Post: NextPage<IPost> = (props) => {
   const { title, author, date, content } = props
 
   return (
@@ -57,7 +57,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
       props: {
         ...post,
-        date: post.date.toLocaleDateString() + post.date.toLocaleTimeString(),
+        date:
+          post.date.toLocaleDateString('ko-KR') +
+          post.date.toLocaleTimeString('ko-KR'),
       },
       revalidate: 10,
     }

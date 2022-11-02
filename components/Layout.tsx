@@ -1,4 +1,3 @@
-// import custom components
 import Footer from 'components/Footer'
 import Header from './Header'
 import SideBar from './Sidebar'
@@ -6,7 +5,6 @@ import SideBar from './Sidebar'
 import styles from 'styles/components/Layout.module.css'
 import { useRouter } from 'next/router'
 
-// export to test hideLayout
 export const hiddenLayoutPages = ['api', 'photocard']
 
 interface Props {
@@ -20,16 +18,18 @@ const Layout: React.FC<Props> = ({ children }) => {
   return hideLayout ? (
     <>{children}</>
   ) : (
-    <div className={styles.container}>
+    <>
       <Header />
-      <main className={styles.main}>
-        <section className={styles.section} style={{ width: '80vh' }}>
-          {children}
-        </section>
-        <SideBar />
-      </main>
-      <Footer />
-    </div>
+      <div className={styles.container}>
+        <main className={styles.main}>
+          <section className={styles.section} style={{ width: '80vh' }}>
+            {children}
+          </section>
+          <SideBar />
+        </main>
+        <Footer />
+      </div>
+    </>
   )
 }
 

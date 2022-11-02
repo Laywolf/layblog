@@ -2,12 +2,15 @@ import mockRouter from 'next-router-mock'
 import { render, screen } from '@testing-library/react'
 
 import Layout, { hiddenLayoutPages } from 'components/Layout'
+import { act } from 'react-dom/test-utils'
 
 jest.mock('next/router', () => require('next-router-mock'))
 
 describe('MyApp', () => {
   it('displays Layout normally', () => {
-    mockRouter.setCurrentUrl('/')
+    act(() => {
+      mockRouter.setCurrentUrl('/')
+    })
 
     render(<Layout />)
 
@@ -22,8 +25,9 @@ describe('MyApp', () => {
 
   it('do not display Layout on specific routes', () => {
     hiddenLayoutPages.forEach((page) => {
-      mockRouter.setCurrentUrl('/')
-      void mockRouter.push('/' + page)
+      act(() => {
+        mockRouter.setCurrentUrl('/' + page)
+      })
 
       render(<Layout />)
 
@@ -35,5 +39,17 @@ describe('MyApp', () => {
       expect(footer).not.toBeInTheDocument()
       expect(sidebar).not.toBeInTheDocument()
     })
+  })
+
+  it('do not display sidebar on mobile', () => {
+    mockRouter.setCurrentUrl('/')
+
+    render(<Layout />)
+
+    global.innerWidth = 400
+    global.dispatchEvent(new Event('resize'))
+
+    const sidebar = screen.queryByRole('complementary')
+    expect(sidebar?.style.display).toBe('')
   })
 })

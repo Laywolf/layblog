@@ -8,12 +8,12 @@ describe('/api/hello', () => {
       query: {},
     })
 
-    await hello(req, res)
+    hello(req, res)
 
     expect(res._getStatusCode()).toBe(200)
     expect(JSON.parse(res._getData())).toEqual(
       expect.objectContaining({
-        name: 'John Doe',
+        name: 'Kanata Hanayuki',
       }),
     )
   })

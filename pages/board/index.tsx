@@ -11,10 +11,10 @@ import Box from '@mui/material/Box'
 
 import ArticleIcon from '@mui/icons-material/Article'
 import CreateIcon from '@mui/icons-material/Create'
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 
 import styles from 'styles/Common.module.css'
 import { getPostCount, getPosts } from 'lib/prisma/posts'
@@ -28,6 +28,9 @@ interface IPost {
   content: string
 }
 
+/**
+ * Post React Function Component
+ */
 const Post: React.FC<IPost> = (props) => {
   const { id, title, author, date, content } = props
   const [open, setOpen] = React.useState(false)
@@ -50,10 +53,23 @@ const Post: React.FC<IPost> = (props) => {
           borderRadius: '8px',
           border: '1px solid lightgray',
           '& > :not(style)': { px: 1 },
+          '@media (max-width: 767px)': {
+            px: 1,
+            '& > :not(style)': { px: 0 },
+          },
         }}
       >
-        <ListItemIcon>
-          <ArticleIcon />
+        <ListItemIcon
+          sx={{
+            '@media (max-width: 767px)': {
+              minWidth: 0,
+            },
+            '@media (max-width: 319px)': {
+              display: 'none',
+            },
+          }}
+        >
+          <ArticleIcon color="primary" />
         </ListItemIcon>
         <ListItemText
           primary={id}
@@ -62,13 +78,14 @@ const Post: React.FC<IPost> = (props) => {
         <ListItemText
           primary={author}
           sx={{
-            width: '120px',
-            maxWidth: '120px',
+            minWidth: '40px',
+            maxWidth: '130px',
             '& > :not(style)': {
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
             },
+            '@media (max-width: 767px)': { maxWidth: '6vw' },
           }}
         />
         <ListItemText
@@ -79,21 +96,47 @@ const Post: React.FC<IPost> = (props) => {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
             },
+            '@media (max-width: 767px)': { maxWidth: '33.5vw' },
           }}
         />
         <ListItemText
-          sx={{ minWidth: '216px', textAlign: 'right' }}
+          sx={{
+            '@media (max-width: 767px)': { maxWidth: '6.3rem' },
+            textAlign: 'right',
+          }}
           primary={date}
         />
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List
-          sx={{ display: 'flex', mx: 1, border: '1px solid lightgray' }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mx: 1,
+            border: '1px solid lightgray',
+            borderTop: 'none',
+            borderBottom: 'none',
+          }}
           component="div"
         >
           <ListItemText
-            sx={{ px: 3, overflowWrap: 'break-word' }}
-            primary={content}
+            sx={{
+              mx: 1,
+              borderBottom: '1px solid black',
+              '@media (min-width: 768px)': { display: 'none' },
+              overflowWrap: 'break-word',
+            }}
+            primary={`${author}: ${title}`}
+            primaryTypographyProps={{ style: { whiteSpace: 'pre-line' } }}
+          />
+          <ListItemText
+            sx={{
+              mx: 3,
+              '@media (max-width: 767px)': { mx: 1, maxWidth: '76vw' },
+              overflowWrap: 'break-word',
+            }}
+            primary={`${content}`}
+            primaryTypographyProps={{ style: { whiteSpace: 'pre-line' } }}
           />
         </List>
       </Collapse>
@@ -106,10 +149,21 @@ interface IProps {
   pages: number
 }
 
+/**
+ * Board NextPage Function
+ */
 const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
   const router = useRouter()
+
+  const defaultPage = (): number => {
+    const page = router.query.page
+    if (typeof page !== 'string' || isNaN(parseInt(page))) return 1
+    return parseInt(page)
+  }
+  const [page] = useState(defaultPage())
+
   const handlePaginationClick = (_, page: number): void => {
-    void (async () => await router.push(`/board/${page}`))()
+    void (async () => await router.push(`?page=${page}`))()
   }
 
   return (
@@ -127,7 +181,6 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
           width: '100%',
           minHeight: '516px',
           overflow: 'auto',
-          bgcolor: 'background.paper',
         }}
         component="nav"
         aria-labelledby="nested-list-subheader"
@@ -153,6 +206,7 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
         ))}
       </List>
       <Pagination
+        defaultPage={page}
         count={pages}
         color="primary"
         shape="rounded"
@@ -165,9 +219,10 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
 
 export default BoardPage
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const page = context.params ? context.params.page : undefined
-  if (typeof page !== 'string') throw Error()
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const page = context.query.page ?? '1'
+  if (typeof page !== 'string' || isNaN(parseInt(page))) throw Error()
+
   const posts = await getPosts(parseInt(page))
   const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
 
@@ -175,22 +230,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       posts: posts.map(({ date, ...post }) => ({
         ...post,
-        date: date.toLocaleDateString() + date.toLocaleTimeString(),
+        date:
+          date.toLocaleDateString('ko-KR') + date.toLocaleTimeString('ko-KR'),
       })),
       pages,
     },
-    revalidate: 10,
-  }
-}
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
-  return {
-    fallback: true,
-    paths: Array.from(Array(pages), (_, i) => ({
-      params: {
-        page: String(i + 1),
-      },
-    })),
   }
 }
