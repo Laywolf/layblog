@@ -13,13 +13,13 @@ import styles from 'styles/Common.module.css'
 import TextField from 'components/form/TextField'
 import Dialog from 'components/Dialog'
 
-interface Board {
+interface IPost {
   title: string
   author: string
   content: string
 }
 
-const defaultValues: Board = {
+const defaultValues: IPost = {
   title: '',
   author: '익명',
   content: '',
@@ -43,7 +43,10 @@ const defaultDialog = (error): IDialog => ({
   content: error,
 })
 
-const CreateBoard: NextPage = () => {
+/**
+ * CreatePost NextPage Function
+ */
+const CreatePost: NextPage = () => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -57,7 +60,7 @@ const CreateBoard: NextPage = () => {
     void (async () => await handleSubmit(submit, undefined)(...args))()
   }
 
-  const submit: SubmitHandler<Board> = async (data) => {
+  const submit: SubmitHandler<IPost> = async (data) => {
     setLoading(true)
 
     try {
@@ -77,7 +80,7 @@ const CreateBoard: NextPage = () => {
   }
 
   const goBack = (): void => {
-    void (async () => await router.push('/board/1'))()
+    void (async () => await router.push('/board'))()
   }
 
   return (
@@ -154,4 +157,4 @@ const CreateBoard: NextPage = () => {
   )
 }
 
-export default CreateBoard
+export default CreatePost

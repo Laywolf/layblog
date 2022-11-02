@@ -11,7 +11,7 @@ import Box from '@mui/material/Box'
 
 import ArticleIcon from '@mui/icons-material/Article'
 import CreateIcon from '@mui/icons-material/Create'
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -28,6 +28,9 @@ interface IPost {
   content: string
 }
 
+/**
+ * Post React Function Component
+ */
 const Post: React.FC<IPost> = (props) => {
   const { id, title, author, date, content } = props
   const [open, setOpen] = React.useState(false)
@@ -50,6 +53,10 @@ const Post: React.FC<IPost> = (props) => {
           borderRadius: '8px',
           border: '1px solid lightgray',
           '& > :not(style)': { px: 1 },
+          '@media screen and (max-width: 767px)': {
+            px: 1,
+            '& > :not(style)': { px: 0 },
+          },
         }}
       >
         <ListItemIcon>
@@ -62,13 +69,14 @@ const Post: React.FC<IPost> = (props) => {
         <ListItemText
           primary={author}
           sx={{
-            width: '120px',
-            maxWidth: '120px',
+            minWidth: '40px',
+            maxWidth: '130px',
             '& > :not(style)': {
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
             },
+            '@media screen and (max-width: 767px)': { maxWidth: '66px' },
           }}
         />
         <ListItemText
@@ -79,10 +87,14 @@ const Post: React.FC<IPost> = (props) => {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
             },
+            '@media screen and (max-width: 767px)': { maxWidth: '200px' },
           }}
         />
         <ListItemText
-          sx={{ minWidth: '216px', textAlign: 'right' }}
+          sx={{
+            '@media screen and (max-width: 767px)': { maxWidth: '100px' },
+            textAlign: 'right',
+          }}
           primary={date}
         />
       </ListItemButton>
@@ -92,8 +104,13 @@ const Post: React.FC<IPost> = (props) => {
           component="div"
         >
           <ListItemText
-            sx={{ px: 3, overflowWrap: 'break-word' }}
-            primary={content}
+            sx={{
+              px: 3,
+              '@media screen and (max-width: 767px)': { px: 1 },
+              overflowWrap: 'break-word',
+            }}
+            primary={`${author}: ${title}\r\n${content}`}
+            primaryTypographyProps={{ style: { whiteSpace: 'pre-line' } }}
           />
         </List>
       </Collapse>
@@ -106,10 +123,13 @@ interface IProps {
   pages: number
 }
 
+/**
+ * Board NextPage Function
+ */
 const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
   const router = useRouter()
   const handlePaginationClick = (_, page: number): void => {
-    void (async () => await router.push(`/board/${page}`))()
+    void (async () => await router.push(`?page=${page}`))()
   }
 
   return (
@@ -165,9 +185,10 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
 
 export default BoardPage
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const page = context.params ? context.params.page : undefined
-  if (typeof page !== 'string') throw Error()
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const page = context.query.page ?? '1'
+  if (typeof page !== 'string' || isNaN(parseInt(page))) throw Error()
+
   const posts = await getPosts(parseInt(page))
   const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
 
@@ -175,22 +196,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       posts: posts.map(({ date, ...post }) => ({
         ...post,
-        date: date.toLocaleDateString() + date.toLocaleTimeString(),
+        date:
+          date.toLocaleDateString('ko-KR') + date.toLocaleTimeString('ko-KR'),
       })),
       pages,
     },
-    revalidate: 10,
-  }
-}
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
-  return {
-    fallback: true,
-    paths: Array.from(Array(pages), (_, i) => ({
-      params: {
-        page: String(i + 1),
-      },
-    })),
   }
 }

@@ -49,7 +49,7 @@ const Sidebar: React.FC = () => {
   ]
 
   return (
-    <aside className={styles.sidebarCard}>
+    <aside className={styles.sidebar}>
       <h2> Avatars</h2>
       <div className={styles.sidebarTag}>
         {Tags.map((tag, index) => (
