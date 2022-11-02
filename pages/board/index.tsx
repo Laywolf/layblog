@@ -53,14 +53,20 @@ const Post: React.FC<IPost> = (props) => {
           borderRadius: '8px',
           border: '1px solid lightgray',
           '& > :not(style)': { px: 1 },
-          '@media screen and (max-width: 767px)': {
+          '@media (max-width: 767px)': {
             px: 1,
             '& > :not(style)': { px: 0 },
           },
         }}
       >
-        <ListItemIcon>
-          <ArticleIcon />
+        <ListItemIcon
+          sx={{
+            '@media (max-width: 767px)': {
+              minWidth: 0,
+            },
+          }}
+        >
+          <ArticleIcon color="primary" />
         </ListItemIcon>
         <ListItemText
           primary={id}
@@ -76,7 +82,7 @@ const Post: React.FC<IPost> = (props) => {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
             },
-            '@media screen and (max-width: 767px)': { maxWidth: '66px' },
+            '@media (max-width: 767px)': { maxWidth: '66px' },
           }}
         />
         <ListItemText
@@ -87,12 +93,12 @@ const Post: React.FC<IPost> = (props) => {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
             },
-            '@media screen and (max-width: 767px)': { maxWidth: '200px' },
+            '@media (max-width: 767px)': { maxWidth: '33.5vw' },
           }}
         />
         <ListItemText
           sx={{
-            '@media screen and (max-width: 767px)': { maxWidth: '100px' },
+            '@media (max-width: 767px)': { maxWidth: '100px' },
             textAlign: 'right',
           }}
           primary={date}
@@ -100,16 +106,33 @@ const Post: React.FC<IPost> = (props) => {
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List
-          sx={{ display: 'flex', mx: 1, border: '1px solid lightgray' }}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            mx: 1,
+            border: '1px solid lightgray',
+            borderTop: 'none',
+            borderBottom: 'none',
+          }}
           component="div"
         >
           <ListItemText
             sx={{
-              px: 3,
-              '@media screen and (max-width: 767px)': { px: 1 },
+              mx: 1,
+              borderBottom: '1px solid black',
+              '@media (min-width: 768px)': { display: 'none' },
               overflowWrap: 'break-word',
             }}
-            primary={`${author}: ${title}\r\n${content}`}
+            primary={`${author}: ${title}`}
+            primaryTypographyProps={{ style: { whiteSpace: 'pre-line' } }}
+          />
+          <ListItemText
+            sx={{
+              mx: 3,
+              '@media (max-width: 767px)': { mx: 1, maxWidth: '76vw' },
+              overflowWrap: 'break-word',
+            }}
+            primary={`${content}`}
             primaryTypographyProps={{ style: { whiteSpace: 'pre-line' } }}
           />
         </List>
@@ -147,7 +170,6 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
           width: '100%',
           minHeight: '516px',
           overflow: 'auto',
-          bgcolor: 'background.paper',
         }}
         component="nav"
         aria-labelledby="nested-list-subheader"

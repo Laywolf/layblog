@@ -24,3 +24,10 @@ a {
     background: black;
   }
 }
+
+:root {
+  --main: #f1bbba;
+  --focus: #eb9f9f;
+  --default: #f8ecc9;
+  --disable: #a79c8e;
+}

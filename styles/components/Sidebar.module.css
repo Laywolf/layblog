@@ -7,7 +7,7 @@
 
 .sidebarTag p {
   display: block;
-  background: black;
+  background: var(--focus);
   color: white;
   border-radius: 10px;
   text-align: center;
@@ -29,7 +29,7 @@
   display: block !important;
 }
 
-@media screen and (max-width: 767px) {
+@media (max-width: 767px) {
   /* mobile */
   .sidebar {
     display: none;

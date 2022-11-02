@@ -5,11 +5,11 @@ import styles from 'styles/components/Sidebar.module.css'
 import useMousePosition from 'utils/useMousePosition'
 
 const Sidebar: React.FC = () => {
-  interface tagProps {
+  interface ItagProps {
     tag: string
     image: string
   }
-  const TagWithHover: React.FC<tagProps> = ({ tag, image }) => {
+  const TagWithHover: React.FC<ItagProps> = ({ tag, image }) => {
     const [isHover, setHover] = useState(false)
 
     const { pageX, pageY } = useMousePosition()
@@ -50,7 +50,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside className={styles.sidebar}>
-      <h2> Avatars</h2>
+      <h2>Avatars</h2>
       <div className={styles.sidebarTag}>
         {Tags.map((tag, index) => (
           <TagWithHover key={index} tag={tag.tag} image={tag.image} />
