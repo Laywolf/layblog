@@ -14,7 +14,7 @@ import CreateIcon from '@mui/icons-material/Create'
 import { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 
 import styles from 'styles/Common.module.css'
 import { getPostCount, getPosts } from 'lib/prisma/posts'
@@ -64,6 +64,9 @@ const Post: React.FC<IPost> = (props) => {
             '@media (max-width: 767px)': {
               minWidth: 0,
             },
+            '@media (max-width: 319px)': {
+              display: 'none',
+            },
           }}
         >
           <ArticleIcon color="primary" />
@@ -82,7 +85,7 @@ const Post: React.FC<IPost> = (props) => {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
             },
-            '@media (max-width: 767px)': { maxWidth: '66px' },
+            '@media (max-width: 767px)': { maxWidth: '6vw' },
           }}
         />
         <ListItemText
@@ -98,7 +101,7 @@ const Post: React.FC<IPost> = (props) => {
         />
         <ListItemText
           sx={{
-            '@media (max-width: 767px)': { maxWidth: '100px' },
+            '@media (max-width: 767px)': { maxWidth: '6.3rem' },
             textAlign: 'right',
           }}
           primary={date}
@@ -151,6 +154,14 @@ interface IProps {
  */
 const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
   const router = useRouter()
+
+  const defaultPage = (): number => {
+    const page = router.query.page
+    if (typeof page !== 'string' || isNaN(parseInt(page))) return 1
+    return parseInt(page)
+  }
+  const [page] = useState(defaultPage())
+
   const handlePaginationClick = (_, page: number): void => {
     void (async () => await router.push(`?page=${page}`))()
   }
@@ -195,6 +206,7 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
         ))}
       </List>
       <Pagination
+        defaultPage={page}
         count={pages}
         color="primary"
         shape="rounded"
