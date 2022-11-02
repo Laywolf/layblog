@@ -22,17 +22,21 @@ exports[`Home renders a heading 1`] = `
     好きな曲 ↓
   </p>
   <div
-    class="video-container"
+    class="video-anchor"
   >
-    <iframe
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen=""
-      frameborder="0"
-      height="315"
-      src="https://www.youtube.com/embed/2b1IexhKPz4"
-      title="YouTube video player"
-      width="560"
-    />
+    <div
+      class="video-container"
+    >
+      <iframe
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen=""
+        height="315"
+        src="https://www.youtube.com/embed/2b1IexhKPz4"
+        style="border: 0px;"
+        title="YouTube video player"
+        width="560"
+      />
+    </div>
   </div>
 </div>
 `;
