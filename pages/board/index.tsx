@@ -116,6 +116,9 @@ const Post: React.FC<IPost> = (props) => {
             border: '1px solid lightgray',
             borderTop: 'none',
             borderBottom: 'none',
+            '&:last-child': {
+              borderBottom: '1px solid lightgray',
+            },
           }}
           component="div"
         >
