@@ -9,8 +9,8 @@ import ListSubheader from '@mui/material/ListSubheader'
 import Pagination from '@mui/material/Pagination'
 import Box from '@mui/material/Box'
 
-import ArticleIcon from '@mui/icons-material/Article'
-import CreateIcon from '@mui/icons-material/Create'
+// import ArticleIcon from '@mui/icons-material/Article'
+// import CreateIcon from '@mui/icons-material/Create'
 
 import { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link'
@@ -21,12 +21,12 @@ import styles from 'styles/Common.module.css'
 import { getPostCount, getPosts } from 'lib/prisma/posts'
 // import { useRouter } from 'next/router'
 
-// const ArticleIcon: FC = () => {
-//   return <div></div>
-// }
-// const CreateIcon: FC = () => {
-//   return <div></div>
-// }
+const ArticleIcon: FC = () => {
+  return <div></div>
+}
+const CreateIcon: FC = () => {
+  return <div></div>
+}
 
 interface IPost {
   id: number
