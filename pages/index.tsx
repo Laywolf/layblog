@@ -34,6 +34,22 @@ const Home: NextPage = () => {
           ></iframe>
         </div>
       </div>
+
+      <p className={styles.description}>好きな曲2 &darr;</p>
+      <div className={styles['video-anchor']}>
+        <div className={styles['video-container']}>
+          <iframe
+            width="560"
+            height="315"
+            style={{ border: 0 }}
+            src="https://www.youtube.com/embed/f4i6Pi2KQh0"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write;
+            encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </div>
     </>
   )
 }
