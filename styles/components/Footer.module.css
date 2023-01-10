@@ -1,6 +1,6 @@
 .footer {
   display: flex;
-  flex: 1;
+  flex: 0 1;
   flex-direction: column;
   padding-top: calc(2rem - 3px);
   padding-bottom: 1rem;
