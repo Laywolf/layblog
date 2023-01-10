@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box'
+
 import { NextPage } from 'next'
 import { SocialIcon } from 'react-social-icons'
 
