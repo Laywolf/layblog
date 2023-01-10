@@ -9,7 +9,8 @@ import ListSubheader from '@mui/material/ListSubheader'
 import Pagination from '@mui/material/Pagination'
 import Box from '@mui/material/Box'
 
-import loadable from '@loadable/component'
+// import ArticleIcon from '@mui/icons-material/Article'
+// import CreateIcon from '@mui/icons-material/Create'
 import { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -19,14 +20,12 @@ import styles from 'styles/Common.module.css'
 import { getPostCount, getPosts } from 'lib/prisma/posts'
 // import { useRouter } from 'next/router'
 
-const ArticleIcon = loadable(
-  async () =>
-    await import(/* webpackMode: "eager" */ `@mui/icons-material/Article`),
-)
-const CreateIcon = loadable(
-  async () =>
-    await import(/* webpackMode: "eager" */ `@mui/icons-material/Create`),
-)
+const ArticleIcon: FC = () => {
+  return <div></div>
+}
+const CreateIcon: FC = () => {
+  return <div></div>
+}
 
 interface IPost {
   id: number
@@ -77,7 +76,7 @@ const Post: FC<IPost> = (props) => {
             },
           }}
         >
-          <ArticleIcon color="primary" />
+          <ArticleIcon /* color="primary" */ />
         </ListItemIcon>
         <ListItemText
           primary={id}
@@ -246,8 +245,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       posts: posts.map(({ date, ...post }) => ({
         ...post,
-        date:
-          date.toLocaleDateString('ko-KR') + date.toLocaleTimeString('ko-KR'),
+        date: date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
       })),
       pages,
     },
