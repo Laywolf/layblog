@@ -77,7 +77,7 @@ const Post: FC<IPost> = (props) => {
             },
           }}
         >
-          <ArticleIcon color="primary" />
+          <ArticleIcon /* color="primary" */ />
         </ListItemIcon>
         <ListItemText
           primary={id}
