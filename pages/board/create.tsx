@@ -4,9 +4,10 @@ import CreateIcon from '@mui/icons-material/Create'
 import ClearIcon from '@mui/icons-material/Clear'
 import LoadingButton from '@mui/lab/LoadingButton'
 import Container from '@mui/material/Container'
+
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import styles from 'styles/Common.module.css'
@@ -56,32 +57,39 @@ const CreatePost: NextPage = () => {
     defaultValues,
   })
 
-  const onSubmit = (...args): void => {
-    void (async () => await handleSubmit(submit, undefined)(...args))()
-  }
-
-  const submit: SubmitHandler<IPost> = async (data) => {
-    setLoading(true)
-
-    try {
-      await fetch('/api/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      }).then((res) => {
-        if (res.ok) goBack()
-        else throw Error(res.statusText)
-      })
-    } catch (error) {
-      setDialog(defaultDialog(error.message))
-      setDialogOpen(true)
-      setLoading(false)
-    }
-  }
-
-  const goBack = (): void => {
+  const goBack = useCallback((): void => {
     void (async () => await router.push('/board'))()
-  }
+  }, [router])
+
+  const onSubmit = useCallback(
+    (...args): void => {
+      const submit: SubmitHandler<IPost> = async (data) => {
+        setLoading(true)
+
+        try {
+          await fetch('/api/posts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          }).then((res) => {
+            if (res.ok) goBack()
+            else throw Error(res.statusText)
+          })
+        } catch (error) {
+          setDialog(defaultDialog(error.message))
+          setDialogOpen(true)
+          setLoading(false)
+        }
+      }
+
+      void (async () => await handleSubmit(submit, undefined)(...args))()
+    },
+    [goBack, handleSubmit],
+  )
+
+  const onCloseDialog = useCallback(() => {
+    setDialogOpen(false)
+  }, [])
 
   return (
     <Container>
@@ -149,7 +157,7 @@ const CreatePost: NextPage = () => {
       <Dialog
         id="board-create"
         open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
+        onClose={onCloseDialog}
         title={dialog.title}
         content={dialog.content}
       />

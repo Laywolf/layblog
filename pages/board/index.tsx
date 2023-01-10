@@ -11,10 +11,11 @@ import Box from '@mui/material/Box'
 
 import ArticleIcon from '@mui/icons-material/Article'
 import CreateIcon from '@mui/icons-material/Create'
+
 import { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import { FC, useCallback, useState, useEffect } from 'react'
 
 import styles from 'styles/Common.module.css'
 import { getPostCount, getPosts } from 'lib/prisma/posts'
@@ -31,19 +32,19 @@ interface IPost {
 /**
  * Post React Function Component
  */
-const Post: React.FC<IPost> = (props) => {
+const Post: FC<IPost> = (props) => {
   const { id, title, author, date, content } = props
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   // const router = useRouter()
 
-  React.useEffect(() => {
+  useEffect(() => {
     setOpen(false)
   }, [id])
 
-  const handleClick = (): void => {
+  const handleClick = useCallback((): void => {
     setOpen(!open)
     // void (async () => await router.push('/board/view/' + id.toString()))()
-  }
+  }, [open])
 
   return (
     <>
@@ -116,6 +117,9 @@ const Post: React.FC<IPost> = (props) => {
             border: '1px solid lightgray',
             borderTop: 'none',
             borderBottom: 'none',
+            '&:last-child': {
+              borderBottom: '1px solid lightgray',
+            },
           }}
           component="div"
         >
@@ -162,9 +166,12 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
   }
   const [page] = useState(defaultPage())
 
-  const handlePaginationClick = (_, page: number): void => {
-    void (async () => await router.push(`?page=${page}`))()
-  }
+  const handlePaginationClick = useCallback(
+    (_, page: number): void => {
+      void (async () => await router.push(`?page=${page}`))()
+    },
+    [router],
+  )
 
   return (
     <Container>
@@ -201,8 +208,8 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
           )
         }
       >
-        {posts?.map((post, index) => (
-          <Post key={index} {...post} />
+        {posts?.map((post) => (
+          <Post key={post.id} {...post} />
         ))}
       </List>
       <Pagination
@@ -220,6 +227,8 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
 export default BoardPage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  context.res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate')
+
   const page = context.query.page ?? '1'
   if (typeof page !== 'string' || isNaN(parseInt(page))) throw Error()
 
@@ -230,8 +239,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       posts: posts.map(({ date, ...post }) => ({
         ...post,
-        date:
-          date.toLocaleDateString('ko-KR') + date.toLocaleTimeString('ko-KR'),
+        date: date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
       })),
       pages,
     },
