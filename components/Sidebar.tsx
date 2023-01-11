@@ -52,7 +52,10 @@ const Sidebar: React.FC = () => {
   return (
     <aside className={styles.sidebar}>
       <h2>Avatars</h2>
-      <div className={styles.sidebarHandle}>{'<'}</div>
+      <label htmlFor="toggle" className={styles.sidebarHandle}>
+        {'<'}
+      </label>
+      <input type="checkbox" id="toggle" className={styles.sidebarToggle} />
       <div className={styles.sidebarTag}>
         {Tags.map((tag) => (
           <TagWithHover key={tag.id} tag={tag.tag} image={tag.image} />
