@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react'
 
 interface Position {
-  pageX: number
-  pageY: number
+  clientX: number
+  clientY: number
 }
 const useMousePosition = (): Position => {
   const [position, setPosition] = useState<Position>({
-    pageX: 0,
-    pageY: 0,
+    clientX: 0,
+    clientY: 0,
   })
 
   const updatePosition = (event: MouseEvent): void => {
-    const { pageX, pageY } = event
+    const { clientX, clientY } = event
 
     setPosition({
-      pageX,
-      pageY,
+      clientX,
+      clientY,
     })
   }
 
