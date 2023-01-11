@@ -22,8 +22,7 @@ const About: NextPage = () => {
       <br />
       <h1 className={styles.title}>사용하는 아바타는?</h1>
       <p className={styles.description}>
-        오른쪽에 있는데(모바일에서는 안보임!) 요즘(22년 10월 기준)은 シグ만
-        사용중
+        오른쪽에 있는데 요즘(22년 10월 기준)은 シグ만 사용중
       </p>
       <br />
       <h1 className={styles.title}>연락은 어디로?</h1>

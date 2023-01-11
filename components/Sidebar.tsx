@@ -12,7 +12,7 @@ interface ItagProps {
 const TagWithHover: React.FC<ItagProps> = ({ tag, image }) => {
   const [isHover, setHover] = useState(false)
 
-  const { pageX, pageY } = useMousePosition()
+  const { clientX, clientY } = useMousePosition()
 
   const handleMouseOver = (): void => {
     setHover(true)
@@ -31,8 +31,8 @@ const TagWithHover: React.FC<ItagProps> = ({ tag, image }) => {
         <div
           className={styles.sidebarTagImage}
           style={{
-            left: pageX,
-            top: pageY,
+            left: clientX,
+            top: clientY,
           }}
         >
           <Image src={image} alt="Image" width={256} height={192} />

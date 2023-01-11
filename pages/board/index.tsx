@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 import { FC, useCallback, useState, useEffect } from 'react'
 
 import styles from 'styles/Common.module.css'
-import { getPostCount, getPosts } from 'lib/prisma/posts'
+// import { getPostCount, getPosts } from 'lib/prisma/posts'
 // import { useRouter } from 'next/router'
 
 interface IPost {
@@ -248,14 +248,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const page = context.query.page ?? '1'
   if (typeof page !== 'string' || isNaN(parseInt(page))) throw Error()
 
-  const posts = await getPosts(parseInt(page))
-  const pages = Math.floor(((await getPostCount()) - 1) / 10) + 1
+  const baseUrl = `http://${context.req.headers.host ?? ''}`
+
+  const res = await fetch(baseUrl + '/api/posts?page=' + page)
+  const data = await res.json()
+  const posts = data.message.posts
+  // const posts = await getPosts(parseInt(page))
+  const pages = Math.floor((data.message.pages - 1) / 10) + 1
+
+  const toKRDate = (date): string => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date
+    return dateObj.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
+  }
 
   return {
     props: {
       posts: posts.map(({ date, ...post }) => ({
         ...post,
-        date: date.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+        date: toKRDate(date),
       })),
       pages,
     },
