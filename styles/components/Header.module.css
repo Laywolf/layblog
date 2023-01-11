@@ -23,3 +23,11 @@
   font-weight: 600;
   color: white;
 }
+
+@media (max-width: 767px) {
+  /* mobile */
+  .header nav ul {
+    padding-left: 0;
+    height: inherit;
+  }
+}

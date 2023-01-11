@@ -51,11 +51,13 @@ const Post: FC<IPost> = (props) => {
       <ListItemButton
         onClick={handleClick}
         sx={{
+          maxWidth: 'calc(100vw - 2rem)',
           borderRadius: '8px',
           border: '1px solid lightgray',
           '& > :not(style)': { px: 1 },
           '@media (max-width: 767px)': {
             px: 1,
+            py: 0,
             '& > :not(style)': { px: 0 },
           },
         }}
@@ -86,7 +88,7 @@ const Post: FC<IPost> = (props) => {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
             },
-            '@media (max-width: 767px)': { maxWidth: '6vw' },
+            '@media (max-width: 767px)': { maxWidth: '15vw' },
           }}
         />
         <ListItemText
@@ -97,12 +99,14 @@ const Post: FC<IPost> = (props) => {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
             },
-            '@media (max-width: 767px)': { maxWidth: '33.5vw' },
           }}
         />
         <ListItemText
           sx={{
-            '@media (max-width: 767px)': { maxWidth: '6.3rem' },
+            '@media (max-width: 767px)': {
+              minWidth: '6.3rem',
+              maxWidth: '6.3rem',
+            },
             textAlign: 'right',
           }}
           primary={date}
@@ -119,6 +123,9 @@ const Post: FC<IPost> = (props) => {
             borderBottom: 'none',
             '&:last-child': {
               borderBottom: '1px solid lightgray',
+            },
+            '@media (max-width: 767px)': {
+              py: 0,
             },
           }}
           component="div"
@@ -174,7 +181,13 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
   )
 
   return (
-    <Container>
+    <Container
+      sx={{
+        '@media (max-width: 767px)': {
+          px: 0,
+        },
+      }}
+    >
       <h1 className={styles.title}>게시판</h1>
       <Box sx={{ display: 'flex', justifyContent: 'right' }}>
         <Link href="/board/create">
@@ -227,7 +240,10 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
 export default BoardPage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  context.res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate')
+  context.res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=1, stale-while-revalidate=59',
+  )
 
   const page = context.query.page ?? '1'
   if (typeof page !== 'string' || isNaN(parseInt(page))) throw Error()
