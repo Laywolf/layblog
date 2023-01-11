@@ -240,10 +240,10 @@ const BoardPage: NextPage<IProps> = ({ posts, pages }) => {
 export default BoardPage
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  context.res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=1, stale-while-revalidate=59',
-  )
+  // context.res.setHeader(
+  //   'Cache-Control',
+  //   'public, s-maxage=1, stale-while-revalidate=59',
+  // )
 
   const page = context.query.page ?? '1'
   if (typeof page !== 'string' || isNaN(parseInt(page))) throw Error()
