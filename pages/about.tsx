@@ -14,8 +14,8 @@ const About: NextPage = () => {
     <>
       <h1 className={styles.title}>이사람은?</h1>
       <p className={styles.description}>
-        딱히 아이디어도 없고 할거 있어도 귀찮아서 안하는 사람 <br />
-        월드 아이디어 주면 뭐라도 개발 해보려고 했는데 이제 귀찮아서 안할 사람
+        개인 홈페이지를 직접 개발하는 개발자 <br />
+        완성도를 최우선으로 생각하여 오류를 가만히 두지 못하는 사람
       </p>
       <br />
       <h1 className={styles.title}>사용하는 아바타는?</h1>
