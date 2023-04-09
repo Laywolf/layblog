@@ -1,10 +1,13 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
-import { getPost } from 'pages/api/posts/[pid]'
-import { Box, Button, Grid, Typography } from '@mui/material'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import Typography from '@mui/material/Typography'
 
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
-import { ArrowBackIosNew } from '@mui/icons-material'
-import { getPosts } from 'pages/api/posts'
+
+import { getPost, getPosts } from 'lib/prisma/posts'
 
 interface IPost {
   title: string
@@ -13,7 +16,7 @@ interface IPost {
   content: string
 }
 
-const Post: React.FC<IPost> = (props) => {
+const Post: NextPage<IPost> = (props) => {
   const { title, author, date, content } = props
 
   return (
@@ -26,7 +29,7 @@ const Post: React.FC<IPost> = (props) => {
         </Grid>
         <Grid item>
           <Link href="/board">
-            <Button variant="text" startIcon={<ArrowBackIosNew />}>
+            <Button variant="text" startIcon={<ArrowBackIosNewIcon />}>
               목록
             </Button>
           </Link>
@@ -54,7 +57,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     return {
       props: {
         ...post,
-        date: post.date.toLocaleDateString() + post.date.toLocaleTimeString(),
+        date:
+          post.date.toLocaleDateString('ko-KR') +
+          post.date.toLocaleTimeString('ko-KR'),
       },
       revalidate: 10,
     }
@@ -67,5 +72,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await getPosts()
 
   const paths = posts.map((post) => ({ params: { id: String(post.id) } }))
-  return { paths, fallback: 'blocking' }
+  return {
+    fallback: true,
+    paths,
+  }
 }

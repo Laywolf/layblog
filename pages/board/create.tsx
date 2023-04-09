@@ -1,23 +1,26 @@
-import { Create, Clear } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
-import { Button } from '@mui/material'
-import { Box, Container } from '@mui/system'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import CreateIcon from '@mui/icons-material/Create'
+import ClearIcon from '@mui/icons-material/Clear'
+import LoadingButton from '@mui/lab/LoadingButton'
+import Container from '@mui/material/Container'
+
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import styles from 'styles/Common.module.css'
 import TextField from 'components/form/TextField'
 import Dialog from 'components/Dialog'
 
-interface Board {
+interface IPost {
   title: string
   author: string
   content: string
 }
 
-const defaultValues: Board = {
+const defaultValues: IPost = {
   title: '',
   author: '익명',
   content: '',
@@ -41,7 +44,10 @@ const defaultDialog = (error): IDialog => ({
   content: error,
 })
 
-const CreateBoard: NextPage = () => {
+/**
+ * CreatePost NextPage Function
+ */
+const CreatePost: NextPage = () => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -51,33 +57,39 @@ const CreateBoard: NextPage = () => {
     defaultValues,
   })
 
-  const onSubmit = (...args): void => {
-    void (async () => await handleSubmit(submit, undefined)(...args))()
-  }
-
-  const submit: SubmitHandler<Board> = async (data) => {
-    setLoading(true)
-
-    try {
-      await fetch('/api/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      }).then((res) => {
-        if (res.ok) goBack()
-        else throw Error(res.statusText)
-      })
-    } catch (error) {
-      console.log(error)
-      setDialog(defaultDialog(error.message))
-      setDialogOpen(true)
-      setLoading(false)
-    }
-  }
-
-  const goBack = (): void => {
+  const goBack = useCallback((): void => {
     void (async () => await router.push('/board'))()
-  }
+  }, [router])
+
+  const onSubmit = useCallback(
+    (...args): void => {
+      const submit: SubmitHandler<IPost> = async (data) => {
+        setLoading(true)
+
+        try {
+          await fetch('/api/posts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          }).then((res) => {
+            if (res.ok) goBack()
+            else throw Error(res.statusText)
+          })
+        } catch (error) {
+          setDialog(defaultDialog(error.message))
+          setDialogOpen(true)
+          setLoading(false)
+        }
+      }
+
+      void (async () => await handleSubmit(submit, undefined)(...args))()
+    },
+    [goBack, handleSubmit],
+  )
+
+  const onCloseDialog = useCallback(() => {
+    setDialogOpen(false)
+  }, [])
 
   return (
     <Container>
@@ -128,14 +140,14 @@ const CreateBoard: NextPage = () => {
             justifyContent: 'right',
           }}
         >
-          <Button onClick={goBack} variant="outlined" endIcon={<Clear />}>
+          <Button onClick={goBack} variant="outlined" endIcon={<ClearIcon />}>
             취소
           </Button>
           <LoadingButton
             type="submit"
             variant="contained"
             loading={loading}
-            endIcon={<Create />}
+            endIcon={<CreateIcon />}
             loadingPosition="end"
           >
             등록
@@ -145,7 +157,7 @@ const CreateBoard: NextPage = () => {
       <Dialog
         id="board-create"
         open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
+        onClose={onCloseDialog}
         title={dialog.title}
         content={dialog.content}
       />
@@ -153,4 +165,4 @@ const CreateBoard: NextPage = () => {
   )
 }
 
-export default CreateBoard
+export default CreatePost

@@ -1,10 +1,10 @@
 .footer {
   display: flex;
-  flex: 1;
+  flex: 0 1;
   flex-direction: column;
-  padding-top: 2rem;
+  padding-top: calc(2rem - 3px);
   padding-bottom: 1rem;
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid black;
   justify-content: center;
   align-items: center;
 }

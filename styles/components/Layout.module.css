@@ -1,9 +1,13 @@
 .container {
   padding: 0 2rem;
+  margin-top: 5rem;
   overflow: auto;
-  height: 100vh;
+  height: calc(100vh - 5rem);
   overflow-y: overlay;
+  display: flex;
+  flex-direction: column;
 }
+
 .container::-webkit-scrollbar {
   width: 1em;
 }
@@ -18,10 +22,10 @@
 }
 
 .main {
-  min-height: 80vh;
   padding: 2rem 0;
   display: flex;
   flex-direction: row;
+  flex: 1 0;
 }
 
 .section {
@@ -29,4 +33,12 @@
   flex: 1;
   flex-direction: column;
   align-items: center;
+}
+
+@media (max-width: 767px) {
+  /* mobile */
+  .container {
+    padding: 0 1rem;
+    height: inherit;
+  }
 }
